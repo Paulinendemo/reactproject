@@ -13,7 +13,7 @@ function Drinks() {
   const [show, setShow] = useState(false);
   const [searchDrink, setSearchDrink] = useState("");
 
- React.useEffect(() => {
+ useEffect(() => {
     fetch(baseurl)
       .then((response) => response.json())
       .then((data) => {

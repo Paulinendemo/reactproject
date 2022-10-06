@@ -9,7 +9,7 @@ function DrinkInfo() {
   const [items, setItems] = useState();
   const { DrinkId} = useParams();
   if (DrinkId !=="") {
-    fetch(`www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${DrinkId}`)
+    fetch(`http://localhost:8000/drinks${DrinkId}`)
       .then((response) => response.json())
       .then((data) => {
         setItems(data[0]);
