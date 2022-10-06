@@ -7,13 +7,13 @@ import Recipe from "./Recipe";
 
 function Drinks() {
   const [baseurl, setBaseurl] = useState(
-    "  http://localhost:8000/drinks"
+    "http://localhost:8000/drinks"
   );
   const [item, setItem] = useState();
   const [show, setShow] = useState(false);
   const [searchDrink, setSearchDrink] = useState("");
 
-  useEffect(() => {
+ React.useEffect(() => {
     fetch(baseurl)
       .then((response) => response.json())
       .then((data) => {
@@ -35,7 +35,7 @@ function Drinks() {
   function handleSearchDrink(e) {
     if (e.key === "Enter") {
       setBaseurl(
-        `http://localhost:8000/drinks${searchDrink}`
+        `http://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchDrink}`
       );
     }
   }
