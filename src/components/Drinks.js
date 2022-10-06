@@ -35,7 +35,7 @@ function Drinks() {
   function handleSearchDrink(e) {
     if (e.key === "Enter") {
       setBaseurl(
-        `http://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchDrink}`
+        `http://localhost:8000/drinks=${searchDrink}`
       );
     }
   }
