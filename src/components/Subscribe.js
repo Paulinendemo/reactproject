@@ -1,57 +1,85 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
+import Axios from "axios";
 
-class Subscribe extends Component {
-  constructor() {
-    super();
-    this.state = {
-      liked: false
-    };
-    this.handleClick = this.handleClick.bind(this);
-  }
+function Reviews() {
+  const [data, setData] = useState([]);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
 
-  handleClick() {
-    this.setState({
-      liked: !this.state.liked
-    });
-  }
+  useEffect(() => {
+    Axios.get("https://jsonplaceholder.typicode.com/users")
+      .then((response) => {
+        console.log("Getting response from ::::", response.data);
+        setData(response.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
-  render() {
-    const text = this.state.liked ? "liked" : "haven't liked";
-    const label = this.state.liked ? "Unlike" : "Like";
+  const postData = (e) => {
+    e.preventDefault();
+    Axios.post("https://jsonplaceholder.typicode.com/users", {
+      name,
+      email,
+    })
+      .then((response) => console.log("Posting data", response))
+      .catch((err) => console.log(err));
+  };
 
+  const postDelete = (id, e) => {
+    e.preventDefault();
+    Axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`)
+      .then((response) => {
+        console.log("Deleted !!!", response);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const arr = data.map((data, index) => {
     return (
-      <>
-      <div class="page">
-        <h1>subscribe to our newsletter &hellip;</h1>
-        <form action="#">
-            <input type="https://www.google.com/" placeholder="Email (e.g. someone@host.com)" />
-            <input type="submit" value="Subscribe" />
-        </form>
-      </div>
-      <div>
-        <button className="btn-dark" onClick={this.handleClick}>❤️
-          {label}
-        </button>
-      </div>
-
-      <div class="col-md-3 text-center">
-            <ul class="list-unstyled mb-0">
-                <li><i class="fas fa-map-marker-alt fa-2x"></i>
-                    <p>Nairobi,Kenya</p>
-                </li>
-
-                <li><i class="fas fa-phone mt-4 fa-2x"></i>
-                    <p>+254888888</p>
-                </li>
-
-                <li><i class="fas fa-envelope mt-4 fa-2x"></i>
-                    <p>cocktails@gmail.com</p>
-                </li>
-            </ul>
-        </div>
-      </>
+      <tr>
+        <td style={{ border: "1px solid black" }}>{data.id}</td>
+        <td style={{ border: "1px solid black" }}> {data.name}</td>
+        <td style={{ border: "1px solid black" }}>{data.email}</td>
+        <td style={{ border: "1px solid black" }}>
+          <button onClick={(e) => postDelete(data.id, e)}>Delete</button>
+        </td>
+      </tr>
     );
-  }
+  });
+  return (
+    <div className="form-div">
+      <form className="review-form">
+        <label>Name</label>
+        <input
+          placeholder="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          type="text"
+        />
+
+        <label>Email</label>
+        <input
+          placeholder="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+        />
+        <hr />
+        <button onclick={postData}>POST</button>
+      </form>
+
+      <table style={{ border: "1px solid black" }}>
+        <tr>
+          <th style={{ border: "1px solid black" }}>ID</th>
+          <th style={{ border: "1px solid black" }}>Name</th>
+          <th style={{ border: "1px solid black" }}>Email</th>
+        </tr>
+
+        {arr}
+      </table>
+    </div>
+  );
 }
 
-export default Subscribe;
+export default Reviews;
+
