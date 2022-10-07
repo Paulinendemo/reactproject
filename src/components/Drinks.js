@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import DrinkList from "./DrinkList";
 import Recipe from "./Recipe";
@@ -13,7 +11,7 @@ function Drinks() {
   const [show, setShow] = useState(false);
   const [searchDrink, setSearchDrink] = useState("");
 
- useEffect(() => {
+ React.useEffect(() => {
     fetch(baseurl)
       .then((response) => response.json())
       .then((data) => {
@@ -35,8 +33,24 @@ function Drinks() {
   function handleSearchDrink(e) {
     if (e.key === "Enter") {
       setBaseurl(
-        `http://localhost:8000/drinks=${searchDrink}`
+        `http://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchDrink}`
       );
+    }
+  }
+
+  //function to search for drinks in items starting with search input and returns all items 
+  // if search input is empty
+  function handleSearch(e){
+    setSearchDrink(e.target.value);
+    const search = e.target.value;
+    if(search !== ""){
+      var filteredData = item.filter((item) => {
+        return item.strDrink.toLowerCase().startsWith(search.toLowerCase());
+        }
+      );
+      setItem(filteredData);
+    } else {
+      setItem(item);
     }
   }
 
@@ -53,8 +67,7 @@ function Drinks() {
           <input
             type="text"
             className="searchbox"
-            onChange={(e) => setSearchDrink(e.target.value)}
-            onKeyPress={handleSearchDrink}
+            onChange={(e) => handleSearch(e)}
             placeholder="Search by  drink name and press enter..."
           ></input>
         </div>
