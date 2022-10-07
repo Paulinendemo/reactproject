@@ -7,14 +7,21 @@ import { useParams } from "react-router-dom";
 
 function DrinkInfo() {
   const [items, setItems] = useState();
-  const { DrinkId} = useParams();
-  if (DrinkId !=="") {
-    fetch(`http://localhost:8000/drinks${DrinkId}`)
+  const { DrinklId } = useParams();
+  
+  React.useEffect(() => {
+    fetch(`http://localhost:8000/drinks`)
       .then((response) => response.json())
       .then((data) => {
-        setItems(data[0]);
+        // filter data to get the drink with the idDrink
+        const filteredData = data.filter((item) => {
+          return item.idDrink === DrinklId;
+          }
+        );
+        setItems(filteredData[0]);
       });
-  }
+  }, [DrinklId]);
+
 
   return (
     <>
